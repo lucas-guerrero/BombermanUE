@@ -12,10 +12,13 @@ class BOMBERMAN_API ABomb : public AActor
 	GENERATED_BODY()
 	
 private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Patate, meta = (AllowPrivateAccess = "true"));
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Bomb, meta = (AllowPrivateAccess = "true"));
 	class USphereComponent* SphereComponent;
 
 	class ABombermanCharacter* MainBomber;
+
+	UPROPERTY(EditDefaultsOnly, BluePrintReadOnly, Category = Bomb)
+	TSubclassOf<class AExplosion> ExplosionClass;
 
 public:	
 	// Sets default values for this actor's properties

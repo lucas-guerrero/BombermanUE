@@ -3,6 +3,7 @@
 
 #include "Bomb.h"
 #include "BombermanCharacter.h"
+#include "Explosion.h"
 
 #include <Components/SphereComponent.h>
 #include <DrawDebugHelpers.h>
@@ -57,10 +58,22 @@ void ABomb::ExploseDirection(FVector Direction)
 
 	DrawDebugLine(GetWorld(), Begin, End, FColor::Red, false, 1.f);
 
+	/*
 	AActor* ActorHit = Hit.GetActor();
 	if (ActorHit != nullptr)
 	{
 		ActorHit->Destroy();
+	}
+	*/
+
+	for (int i = 0; i < 4; ++i)
+	{
+		FVector Spawn = (Direction * i) + GetActorLocation();
+		FTransform Transform = GetActorTransform();
+		Transform.SetTranslation(Spawn);
+
+		AExplosion* Explo = GetWorld()->SpawnActorDeferred<AExplosion>(ExplosionClass, Transform);
+		Explo->FinishSpawning(Transform);
 	}
 }
 
