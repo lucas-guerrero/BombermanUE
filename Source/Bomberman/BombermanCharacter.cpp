@@ -100,7 +100,7 @@ void ABombermanCharacter::MoveRight(float Value)
 void ABombermanCharacter::TakeBomb()
 {
 	if (NbBombPossed <= 0 || BombClass == nullptr) return;
-	NbBombPossed--;
+	//NbBombPossed--;
 	ABomb* Bomb = GetWorld()->SpawnActorDeferred<ABomb>(BombClass, GetActorTransform());
 	Bomb->SetMainBomber(this);
 	Bomb->FinishSpawning(GetActorTransform());

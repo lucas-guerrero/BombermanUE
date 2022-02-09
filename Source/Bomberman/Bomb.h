@@ -17,12 +17,12 @@ private:
 
 	class ABombermanCharacter* MainBomber;
 
-	UPROPERTY(EditDefaultsOnly, BluePrintReadOnly, Category = Bomb)
-	TSubclassOf<class AExplosion> ExplosionClass;
-
 public:	
 	// Sets default values for this actor's properties
 	ABomb();
+
+	UPROPERTY(EditDefaultsOnly, BluePrintReadOnly, Category = Bomb)
+	TSubclassOf<class AExplosion> ExplosionClass;
 
 protected:
 	// Called when the game starts or when spawned

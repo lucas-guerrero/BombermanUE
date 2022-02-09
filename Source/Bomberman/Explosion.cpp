@@ -21,22 +21,27 @@ AExplosion::AExplosion()
 
 void AExplosion::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+
+	OtherActor->Destroy();
+	/*
 	if (Cast<ABombermanCharacter>(OtherActor) != nullptr)
 	{
 		OtherActor->Destroy();
 	}
+	
 	else if (Cast<ABomb>(OtherActor) != nullptr)
 	{
 		ABomb* Bomb = Cast<ABomb>(OtherActor);
 		Bomb->Explose();
 	}
+	*/
 }
 
 // Called when the game starts or when spawned
 void AExplosion::BeginPlay()
 {
 	Super::BeginPlay();
-	SetLifeSpan(2.f);
+	SetLifeSpan(0.5f);
 }
 
 // Called every frame

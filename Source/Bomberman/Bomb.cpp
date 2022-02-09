@@ -27,7 +27,7 @@ ABomb::ABomb()
 void ABomb::BeginPlay()
 {
 	Super::BeginPlay();
-	SetLifeSpan(1.f);
+	SetLifeSpan(2.f);
 }
 
 void ABomb::Destroyed()
@@ -35,8 +35,10 @@ void ABomb::Destroyed()
 	if (MainBomber != nullptr)
 	{
 		MainBomber->NbBombPossed++;
+
 		Explose();
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, "Bomb !!!");
+
+		GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, "Bomb !!!");
 	}
 }
 
@@ -56,25 +58,15 @@ void ABomb::ExploseDirection(FVector Direction)
 		TraceParams
 	);
 
-	DrawDebugLine(GetWorld(), Begin, End, FColor::Red, false, 1.f);
-
-	/*
-	AActor* ActorHit = Hit.GetActor();
-	if (ActorHit != nullptr)
+	DrawDebugLine(GetWorld(), Begin, End, FColor::Red, false, 0.5f);
+	
+	for (int i = 0; i < 6; ++i)
 	{
-		ActorHit->Destroy();
+		FVector SpawnLocation = (Direction * i * 75) + GetActorLocation();
+		FTransform SpawnTransform(GetActorRotation(), SpawnLocation);
+		AExplosion* Explo = GetWorld()->SpawnActor<AExplosion>(ExplosionClass, SpawnTransform);
 	}
-	*/
-
-	for (int i = 0; i < 4; ++i)
-	{
-		FVector Spawn = (Direction * i) + GetActorLocation();
-		FTransform Transform = GetActorTransform();
-		Transform.SetTranslation(Spawn);
-
-		AExplosion* Explo = GetWorld()->SpawnActorDeferred<AExplosion>(ExplosionClass, Transform);
-		Explo->FinishSpawning(Transform);
-	}
+	
 }
 
 void ABomb::Explose()
@@ -94,6 +86,5 @@ void ABomb::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor
 void ABomb::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
