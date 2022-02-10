@@ -4,6 +4,7 @@
 #include "Bomb.h"
 #include "BombermanCharacter.h"
 #include "Explosion.h"
+#include "BlockBreakable.h"
 
 #include <Components/SphereComponent.h>
 #include <DrawDebugHelpers.h>
@@ -38,31 +39,55 @@ void ABomb::Destroyed()
 
 		Explose();
 
-		GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, "Bomb !!!");
+		//GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, "Bomb !!!");
 	}
 }
 
 void ABomb::ExploseDirection(FVector Direction)
 {
-	float Reach = 500.f;
+	float SizeBlock = 4 * 50;
+	int NbBlock = MainBomber->NbCellExplosed + 2;
+	float Reach = NbBlock * SizeBlock;
 	FVector End = GetActorLocation() + Direction * Reach;
 	FVector Begin = GetActorLocation();
 
 	FHitResult Hit;
-	FCollisionQueryParams TraceParams(FName(TEXT("")), false, GetOwner());
-	GetWorld()->LineTraceSingleByObjectType(
+	ECollisionChannel Channel = ECollisionChannel::ECC_GameTraceChannel2;
+	FCollisionQueryParams QueryParam;
+	QueryParam.AddIgnoredActor(this);
+
+	bool IsHit = GetWorld()->LineTraceSingleByChannel(
 		OUT Hit,
 		Begin,
 		End,
-		FCollisionObjectQueryParams(ECollisionChannel::ECC_Pawn),
-		TraceParams
+		Channel,
+		QueryParam
 	);
 
-	DrawDebugLine(GetWorld(), Begin, End, FColor::Red, false, 0.5f);
-	
-	for (int i = 0; i < 6; ++i)
+	//DrawDebugLine(GetWorld(), Begin, End, FColor::Red, false, 0.5f);
+
+	if (IsHit)
 	{
-		FVector SpawnLocation = (Direction * i * 75) + GetActorLocation();
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, "HIT");
+		//FHitResult Hit = Hits[0];
+		DrawDebugLine(GetWorld(), Begin, Hit.GetActor()->GetActorLocation(), FColor::Red, false, 0.5f);
+
+		ABlockBreakable* Block = Cast<ABlockBreakable>(Hit.GetActor());
+		if (Block)
+		{
+			Block->Destroy();
+		}
+
+		float Distance = Hit.Distance;
+		NbBlock = Distance / SizeBlock;
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("NBBlock: %d"), NbBlock));
+	}
+	
+	
+	// 1 Block = 4*50
+	for (int i = 0; i < NbBlock*4; ++i)
+	{
+		FVector SpawnLocation = (Direction * i * 50) + GetActorLocation();
 		FTransform SpawnTransform(GetActorRotation(), SpawnLocation);
 		AExplosion* Explo = GetWorld()->SpawnActor<AExplosion>(ExplosionClass, SpawnTransform);
 	}

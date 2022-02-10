@@ -28,6 +28,10 @@ public:
 	// number of bomb
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gameplay)
 	int NbBombPossed;
+
+	// number of Cell of the bomb explosed
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gameplay)
+	int NbCellExplosed;
 	
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
