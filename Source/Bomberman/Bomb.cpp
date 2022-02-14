@@ -17,10 +17,8 @@ ABomb::ABomb()
 
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere Component"));
 	SphereComponent->SetSphereRadius(35.f);
-	//SphereComponent->SetCollisionProfileName(FName("Patate"));
-	//SphereComponent->SetSimulatePhysics(false);
 	SphereComponent->SetNotifyRigidBodyCollision(false);
-	SphereComponent->OnComponentEndOverlap.AddDynamic(this, &ABomb::OnOverlapEnd);
+	SphereComponent->SetGenerateOverlapEvents(true);
 	RootComponent = SphereComponent;
 }
 
@@ -28,6 +26,9 @@ ABomb::ABomb()
 void ABomb::BeginPlay()
 {
 	Super::BeginPlay();
+
+	SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &ABomb::OnOverlapBegin);
+	SphereComponent->OnComponentEndOverlap.AddDynamic(this, &ABomb::OnOverlapEnd);
 	SetLifeSpan(2.f);
 }
 
@@ -46,7 +47,7 @@ void ABomb::Destroyed()
 void ABomb::ExploseDirection(FVector Direction)
 {
 	float SizeBlock = 4 * 50;
-	int NbBlock = MainBomber->NbCellExplosed + 2;
+	int NbBlock = MainBomber->NbCellExplosed;
 	float Reach = NbBlock * SizeBlock;
 	FVector End = GetActorLocation() + Direction * Reach;
 	FVector Begin = GetActorLocation();
@@ -77,10 +78,9 @@ void ABomb::ExploseDirection(FVector Direction)
 		{
 			Block->Destroy();
 		}
-
 		float Distance = Hit.Distance;
 		NbBlock = Distance / SizeBlock;
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("NBBlock: %d"), NbBlock));
+		//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("NBBlock: %d"), NbBlock));
 	}
 	
 	
@@ -104,7 +104,12 @@ void ABomb::Explose()
 
 void ABomb::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, "Change !!");
+	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, "SORTIE");
+}
+
+void ABomb::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, "DEDANS");
 }
 
 // Called every frame
