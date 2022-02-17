@@ -10,6 +10,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include <TimerManager.h>
 
 //////////////////////////////////////////////////////////////////////////
 // ABombermanCharacter
@@ -103,7 +104,19 @@ void ABombermanCharacter::TakeBomb()
 {
 	if (NbBombPossed <= 0 || BombClass == nullptr) return;
 	NbBombPossed--;
-	ABomb* Bomb = GetWorld()->SpawnActorDeferred<ABomb>(BombClass, GetActorTransform());
+
+	FVector Location = GetActorLocation();
+	Location.Z -= 90.f;
+	FTransform Tranform(GetActorRotation(), Location, GetActorScale());
+
+	FTimerHandle TimerHandle;
+	FTimerDelegate TimerDelegate = FTimerDelegate::CreateUObject(this, &ABombermanCharacter::SpawnBomb, Tranform);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDelegate, 0.25f, false);
+}
+
+void ABombermanCharacter::SpawnBomb(FTransform Transform)
+{
+	ABomb* Bomb = GetWorld()->SpawnActorDeferred<ABomb>(BombClass, Transform);
 	Bomb->SetMainBomber(this);
-	Bomb->FinishSpawning(GetActorTransform());
+	Bomb->FinishSpawning(Transform);
 }

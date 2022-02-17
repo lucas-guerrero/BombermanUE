@@ -15,6 +15,7 @@ AExplosion::AExplosion()
 
 
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Component"));
+	BoxComponent->SetCollisionProfileName(FName("Explosion"));
 	BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &AExplosion::OnOverlapBegin);
 	RootComponent = BoxComponent;
 }

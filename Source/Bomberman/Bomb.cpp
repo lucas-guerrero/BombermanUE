@@ -17,8 +17,7 @@ ABomb::ABomb()
 
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere Component"));
 	SphereComponent->SetSphereRadius(35.f);
-	SphereComponent->SetNotifyRigidBodyCollision(false);
-	SphereComponent->SetGenerateOverlapEvents(true);
+	SphereComponent->SetCollisionProfileName(FName("Bomb"));
 	RootComponent = SphereComponent;
 }
 
@@ -27,8 +26,6 @@ void ABomb::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &ABomb::OnOverlapBegin);
-	SphereComponent->OnComponentEndOverlap.AddDynamic(this, &ABomb::OnOverlapEnd);
 	SetLifeSpan(2.f);
 }
 
@@ -39,8 +36,6 @@ void ABomb::Destroyed()
 		MainBomber->NbBombPossed++;
 
 		Explose();
-
-		//GEngine->AddOnScreenDebugMessage(-1, 0.f, FColor::Red, "Bomb !!!");
 	}
 }
 
@@ -53,7 +48,7 @@ void ABomb::ExploseDirection(FVector Direction)
 	FVector Begin = GetActorLocation();
 
 	FHitResult Hit;
-	ECollisionChannel Channel = ECollisionChannel::ECC_GameTraceChannel2;
+	ECollisionChannel Channel = ECollisionChannel::ECC_Visibility;
 	FCollisionQueryParams QueryParam;
 	QueryParam.AddIgnoredActor(this);
 
@@ -73,13 +68,15 @@ void ABomb::ExploseDirection(FVector Direction)
 		//FHitResult Hit = Hits[0];
 		DrawDebugLine(GetWorld(), Begin, Hit.GetActor()->GetActorLocation(), FColor::Red, false, 0.5f);
 
+		float Distance = Hit.Distance;
+		NbBlock = Distance / SizeBlock;
+
 		ABlockBreakable* Block = Cast<ABlockBreakable>(Hit.GetActor());
 		if (Block)
 		{
 			Block->Destroy();
+			NbBlock++;
 		}
-		float Distance = Hit.Distance;
-		NbBlock = Distance / SizeBlock;
 		//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("NBBlock: %d"), NbBlock));
 	}
 	
@@ -100,16 +97,6 @@ void ABomb::Explose()
 	ExploseDirection(FVector::LeftVector);
 	ExploseDirection(FVector::ForwardVector);
 	ExploseDirection(FVector::BackwardVector);
-}
-
-void ABomb::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{
-	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, "SORTIE");
-}
-
-void ABomb::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, "DEDANS");
 }
 
 // Called every frame

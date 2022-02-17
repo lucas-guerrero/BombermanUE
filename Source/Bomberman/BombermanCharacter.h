@@ -51,6 +51,8 @@ protected:
 
 	void TakeBomb();
 
+	void SpawnBomb(FTransform Transform);
+
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
