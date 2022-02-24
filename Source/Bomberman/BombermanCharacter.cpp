@@ -120,3 +120,25 @@ void ABombermanCharacter::SpawnBomb(FTransform Transform)
 	Bomb->SetMainBomber(this);
 	Bomb->FinishSpawning(Transform);
 }
+
+void ABombermanCharacter::AddBomb()
+{
+	++NbBombPossed;
+}
+
+void ABombermanCharacter::RemoveBomb()
+{
+	if (NbBombPossed <= 1) return;
+	--NbBombPossed;
+}
+
+void ABombermanCharacter::AddExplosion()
+{
+	++NbCellExplosed;
+}
+
+void ABombermanCharacter::RemoveExplosion()
+{
+	if (NbCellExplosed <= 1) return;
+	--NbCellExplosed;
+}

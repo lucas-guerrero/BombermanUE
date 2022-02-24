@@ -32,14 +32,6 @@ public:
 	// number of Cell of the bomb explosed
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gameplay)
 	int NbCellExplosed;
-	
-	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
-	//float BaseTurnRate;
-
-	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
-	//float BaseLookUpRate;
 
 protected:
 
@@ -63,5 +55,11 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	void AddBomb();
+	void RemoveBomb();
+
+	void AddExplosion();
+	void RemoveExplosion();
 };
 
