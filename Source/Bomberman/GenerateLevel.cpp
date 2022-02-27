@@ -71,7 +71,7 @@ void AGenerateLevel::BeginPlay()
 	}
 
 	File.close();
-	
+	GenerateCamera();
 }
 
 void AGenerateLevel::GenerateWall(int x, int y)
@@ -144,5 +144,18 @@ void AGenerateLevel::GeneratePlayer(int x, int y, char c)
 		}
 		*/
 		
+	}
+}
+
+void AGenerateLevel::GenerateCamera()
+{
+
+	APlayerCameraManager* PCM = UGameplayStatics::GetPlayerCameraManager(this, 0);
+	if (PCM)
+	{
+		PCM->SetActorLocation(FVector(30.f, 30.f, 100.f));
+		PCM->SetActorRotation(FVector(0.f, -90.f, 0.f).Rotation());
+
+		GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Red, "CAMERA : " + PCM->GetCameraLocation().ToString());
 	}
 }

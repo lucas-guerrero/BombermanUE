@@ -38,4 +38,6 @@ protected:
 	void GenerateBreak(int x, int y);
 
 	void GeneratePlayer(int x, int y, char c);
+
+	void GenerateCamera();
 };

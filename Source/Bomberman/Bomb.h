@@ -24,6 +24,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BluePrintReadOnly, Category = Bomb)
 	TSubclassOf<class AExplosion> ExplosionClass;
 
+	UPROPERTY(EditAnywhere, Category = Bomb)
+		bool Explode = true;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

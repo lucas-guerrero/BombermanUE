@@ -26,7 +26,7 @@ void ABomb::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SetLifeSpan(2.f);
+	if (Explode) SetLifeSpan(2.f);
 }
 
 void ABomb::Destroyed()
