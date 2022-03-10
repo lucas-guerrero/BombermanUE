@@ -16,15 +16,24 @@ class BOMBERMAN_API AMenu_PC : public APlayerController
 	
 public:
 	UPROPERTY(EditDefaultsOnly)
-		TSubclassOf<class UHUD_Menu> BP_HUD_Menu;
+	TSubclassOf<class UHUD_Menu> BP_HUD_Menu;
 
-	void ShowHUD_Menu();
-	void HideHUD_Menu();
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UHUD_MultiMenu> BP_HUD_MultiMenu;
+
+	void ShowMenu();
+	void HideMenu();
+
+	void ShowMultiMenu();
+	void HideMultiMenu();
 
 protected:
 	virtual void BeginPlay() override;
 
 private:
 	UPROPERTY()
-		class UHUD_Menu* HUD_Menu;
+	class UHUD_Menu* HUD_Menu;
+
+	UPROPERTY()
+	class UHUD_MultiMenu* HUD_MultiMenu;
 };

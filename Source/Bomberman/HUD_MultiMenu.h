@@ -4,36 +4,32 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "HUD_Menu.generated.h"
+#include "HUD_MultiMenu.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class BOMBERMAN_API UHUD_Menu : public UUserWidget
+class BOMBERMAN_API UHUD_MultiMenu : public UUserWidget
 {
 	GENERATED_BODY()
 	
 public:
 	UPROPERTY(meta = (BindWidget))
-	class UButton* QuitButton;
+	class UButton* HostButton;
 
 	UPROPERTY(meta = (BindWidget))
-	class UButton* SoloButton;
+	class UButton* JoinButton;
 
 	UPROPERTY(meta = (BindWidget))
-	class UButton* MultiButton;
+	class UEditableTextBox* EditTextIp;
 
 	virtual void NativeOnInitialized();
 
 protected:
 	UFUNCTION()
-	void OnPlayClick();
+	void OnHostClick();
 
 	UFUNCTION()
-	void OnMultiClick();
-
-	UFUNCTION()
-	void OnQuitClick();
-
+	void OnJoinClick();
 };

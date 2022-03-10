@@ -11,23 +11,36 @@ void UHUD_Menu::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
-	if (B_Jouer != nullptr) B_Jouer->OnClicked.AddDynamic(this, &UHUD_Menu::OnJouerClick);
-	if (B_Quitter != nullptr) B_Quitter->OnClicked.AddDynamic(this, &UHUD_Menu::OnQuitterClick);
+	if (SoloButton) SoloButton->OnClicked.AddDynamic(this, &UHUD_Menu::OnPlayClick);
+	if (QuitButton) QuitButton->OnClicked.AddDynamic(this, &UHUD_Menu::OnQuitClick);
+	if (MultiButton) MultiButton->OnClicked.AddDynamic(this, &UHUD_Menu::OnMultiClick);
 }
 
-void UHUD_Menu::OnJouerClick()
+void UHUD_Menu::OnPlayClick()
 {
 	AMenu_PC* PlayerController = Cast<AMenu_PC>(GetOwningPlayer());
 
 	if (PlayerController != nullptr)
 	{
-		PlayerController->HideHUD_Menu();
+		PlayerController->HideMenu();
 	}
 
 	UGameplayStatics::OpenLevel(this, FName("Game"));
 }
 
-void UHUD_Menu::OnQuitterClick()
+void UHUD_Menu::OnMultiClick()
+{
+	
+	AMenu_PC* PlayerController = Cast<AMenu_PC>(GetOwningPlayer());
+
+	if (PlayerController != nullptr)
+	{
+		PlayerController->HideMenu();
+		PlayerController->ShowMultiMenu();
+	}
+}
+
+void UHUD_Menu::OnQuitClick()
 {
 	UKismetSystemLibrary::QuitGame(GetWorld(), nullptr, EQuitPreference::Quit, true);
 }
