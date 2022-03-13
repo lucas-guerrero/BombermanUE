@@ -4,29 +4,32 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "HUD_MultiMenu.generated.h"
+#include "HUD_Session_Multi.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class BOMBERMAN_API UHUD_MultiMenu : public UUserWidget
+class BOMBERMAN_API UHUD_Session_Multi : public UUserWidget
 {
 	GENERATED_BODY()
-	
+
 public:
 	UPROPERTY(meta = (BindWidget))
-	class UButton* HostButton;
+		class UButton* LaunchButton;
 
 	UPROPERTY(meta = (BindWidget))
-	class UButton* JoinButton;
+		class UButton* LeaveButton;
 
 	virtual void NativeOnInitialized();
 
+	void Autority();
+	void NotAutority();
+
 protected:
 	UFUNCTION()
-	void OnHostClick();
+		void OnLaunchClick();
 
 	UFUNCTION()
-	void OnJoinClick();
+		void OnLeaveClick();
 };

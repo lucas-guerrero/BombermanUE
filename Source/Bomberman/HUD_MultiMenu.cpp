@@ -4,7 +4,7 @@
 #include "HUD_MultiMenu.h"
 
 #include <Components/Button.h>
-#include <Components/EditableTextBox.h>
+#include <Components/EditableText.h>
 
 void UHUD_MultiMenu::NativeOnInitialized()
 {
@@ -16,7 +16,7 @@ void UHUD_MultiMenu::NativeOnInitialized()
 
 void UHUD_MultiMenu::OnHostClick()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("HOST !!!"));
+	//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("HOST !!!"));
 	/*
 	AMenu_PC* PlayerController = Cast<AMenu_PC>(GetOwningPlayer());
 
@@ -31,5 +31,5 @@ void UHUD_MultiMenu::OnHostClick()
 
 void UHUD_MultiMenu::OnJoinClick()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("JOIN !!!"));
+	//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, EditTextIp->GetText().ToString());
 }

@@ -4,6 +4,7 @@
 #include "Menu_PC.h"
 #include "HUD_Menu.h"
 #include "HUD_MultiMenu.h"
+#include "HUD_Session_Multi.h"
 
 #include <Kismet/GameplayStatics.h>
 
@@ -14,6 +15,13 @@ void AMenu_PC::BeginPlay()
 	FString levelName = GetWorld()->GetMapName();
 
 	if (levelName.Contains(FString("MainMenu"))) ShowMenu();
+
+	if (levelName.Contains(FString("SessionMap")))
+	{
+		ShowWaitMenu();
+		if (HasAuthority()) GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Serveur"));
+		else GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("Client"));
+	}
 }
 
 void AMenu_PC::ShowMenu()
@@ -23,7 +31,7 @@ void AMenu_PC::ShowMenu()
 	SetInputMode(FInputModeUIOnly());
 	bShowMouseCursor = true;
 	HUD_Menu = CreateWidget<UHUD_Menu>(this, BP_HUD_Menu);
-	HUD_Menu->AddToViewport();
+	if (HUD_Menu) HUD_Menu->AddToViewport();
 }
 
 void AMenu_PC::ShowMultiMenu()
@@ -33,7 +41,23 @@ void AMenu_PC::ShowMultiMenu()
 	SetInputMode(FInputModeUIOnly());
 	bShowMouseCursor = true;
 	HUD_MultiMenu = CreateWidget<UHUD_MultiMenu>(this, BP_HUD_MultiMenu);
-	HUD_MultiMenu->AddToViewport();
+	if (HUD_MultiMenu) HUD_MultiMenu->AddToViewport();
+}
+
+void AMenu_PC::ShowWaitMenu()
+{
+	if (!BP_HUD_SessionMenu) return;
+
+	SetInputMode(FInputModeUIOnly());
+	bShowMouseCursor = true;
+	HUD_SessionMenu = CreateWidget<UHUD_Session_Multi>(this, BP_HUD_SessionMenu);
+	if (HUD_SessionMenu)
+	{
+		if(HasAuthority()) HUD_SessionMenu->Autority();
+		else HUD_SessionMenu->NotAutority();
+
+		HUD_SessionMenu->AddToViewport();
+	}
 }
 
 void AMenu_PC::HideMenu()
@@ -56,4 +80,21 @@ void AMenu_PC::HideMultiMenu()
 
 	SetInputMode(FInputModeGameOnly());
 	bShowMouseCursor = false;
+}
+
+void AMenu_PC::HideWaitMenu()
+{
+	if (!HUD_SessionMenu) return;
+
+	HUD_SessionMenu->RemoveFromParent();
+	HUD_SessionMenu->Destruct();
+
+	SetInputMode(FInputModeGameOnly());
+	bShowMouseCursor = false;
+}
+
+void AMenu_PC::LaunchGame()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Travel !!!"));
+	GetWorld()->ServerTravel(TEXT("Game"));
 }

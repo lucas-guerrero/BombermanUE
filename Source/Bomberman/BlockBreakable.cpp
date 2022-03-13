@@ -21,9 +21,6 @@ ABlockBreakable::ABlockBreakable()
 
 void ABlockBreakable::Destroyed()
 {
-	// Spawn Amelioration avec random
-	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, TEXT("BlockDestroy"));
-
 	float SpawnExtension = FMath::RandRange(0, 1);
 	if (SpawnExtension <= 0.6) return;
 	

@@ -33,6 +33,9 @@ void AGenerateLevel::BeginPlay()
 	float SizeLevels = NbBlock * UnitBlock / 2;
 	*/
 
+	GenerateCamera();
+
+	if (HasAuthority()) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("Authority"));
 
 	std::string NameFile = TCHAR_TO_UTF8(*FPaths::ProjectDir());
 	NameFile = NameFile + "/Content/Levels/lvl1.txt";
@@ -71,7 +74,6 @@ void AGenerateLevel::BeginPlay()
 	}
 
 	File.close();
-	GenerateCamera();
 }
 
 void AGenerateLevel::GenerateWall(int x, int y)

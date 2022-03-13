@@ -21,11 +21,22 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class UHUD_MultiMenu> BP_HUD_MultiMenu;
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UHUD_Session_Multi> BP_HUD_SessionMenu;
+
 	void ShowMenu();
 	void HideMenu();
 
 	void ShowMultiMenu();
 	void HideMultiMenu();
+
+	void ShowWaitMenu();
+
+	UFUNCTION(BlueprintCallable)
+	void HideWaitMenu();
+
+	UFUNCTION(BlueprintCallable)
+	void LaunchGame();
 
 protected:
 	virtual void BeginPlay() override;
@@ -36,4 +47,7 @@ private:
 
 	UPROPERTY()
 	class UHUD_MultiMenu* HUD_MultiMenu;
+
+	UPROPERTY()
+	class UHUD_Session_Multi* HUD_SessionMenu;
 };
