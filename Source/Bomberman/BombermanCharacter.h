@@ -34,6 +34,7 @@ protected:
 	/** Called for side to side input */
 	void MoveRight(float Value);
 
+	UFUNCTION(BlueprintCallable, Category="Bomb")
 	void TakeBomb();
 
 	void SpawnBomb(FTransform Transform);
