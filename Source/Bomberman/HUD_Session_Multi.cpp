@@ -23,11 +23,6 @@ void UHUD_Session_Multi::OnLeaveClick()
 	//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, EditTextIp->GetText().ToString());
 }
 
-void UHUD_Session_Multi::Autority()
-{
-	LeaveButton->SetIsEnabled(false);
-}
-
 void UHUD_Session_Multi::NotAutority()
 {
 	LaunchButton->SetIsEnabled(false);

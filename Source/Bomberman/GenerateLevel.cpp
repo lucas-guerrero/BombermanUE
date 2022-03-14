@@ -112,6 +112,7 @@ void AGenerateLevel::GeneratePlayer(int x, int y, char c)
 
 		if (c == '1')
 		{
+			/*
 			UGameplayStatics::GetGameState(GetWorld());
 			APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
 			if (PC)
@@ -121,6 +122,7 @@ void AGenerateLevel::GeneratePlayer(int x, int y, char c)
 
 				Player->SetActorLocation(SpawnLocation);
 			}
+			*/
 		}
 		else
 		{

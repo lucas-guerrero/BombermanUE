@@ -2,6 +2,7 @@
 
 #include "BombermanCharacter.h"
 #include "Bomb.h"
+#include "GameCamera.h"
 
 #include "HeadMountedDisplayFunctionLibrary.h"
 #include "Camera/CameraComponent.h"
@@ -11,6 +12,7 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 #include <TimerManager.h>
+#include "Kismet/GameplayStatics.h"
 
 //////////////////////////////////////////////////////////////////////////
 // ABombermanCharacter
@@ -25,6 +27,23 @@ ABombermanCharacter::ABombermanCharacter()
 	NbCellExplosed = 2;
 
 	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
+}
+
+// Called when the game starts or when spawned
+void ABombermanCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	APlayerController* OurPlayerController = UGameplayStatics::GetPlayerController(this, 0);
+
+	TArray<AActor*> FindCamera;
+
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AGameCamera::StaticClass(), FindCamera);
+
+	if (FindCamera.Num() > 0) OurPlayerController->SetViewTargetWithBlend(FindCamera[0], 2.f);
+	else GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("Not Find Camera"));
+
+
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -112,6 +131,6 @@ void ABombermanCharacter::AddExplosion()
 
 void ABombermanCharacter::RemoveExplosion()
 {
-	if (NbCellExplosed <= 1) return;
+	if (NbCellExplosed <= 2) return;
 	--NbCellExplosed;
 }
