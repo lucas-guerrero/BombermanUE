@@ -21,13 +21,26 @@ ABlockBreakable::ABlockBreakable()
 
 void ABlockBreakable::Destroyed()
 {
+	/*
+	FTimerHandle TimerHandle;
+	FTimerDelegate TimerDelegate = FTimerDelegate::CreateUObject(this, &ABlockBreakable::SpawnExtension);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDelegate, 0.75f, false);
+	*/
+
+	SpawnExtension();
+}
+
+void ABlockBreakable::SpawnExtension()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Generate !!!"));
 	float SpawnExtension = FMath::RandRange(0, 1);
 	if (SpawnExtension <= 0.6) return;
-	
+
 	int IndexExtension = FMath::RandRange(0, ListExtension.Num() - 1);
 
 	FVector SpawnLocation = GetActorLocation();
 	FTransform SpawnTransform(GetActorRotation(), SpawnLocation);
+
 	GetWorld()->SpawnActor<AExtension>(ListExtension[IndexExtension], SpawnTransform);
 }
 

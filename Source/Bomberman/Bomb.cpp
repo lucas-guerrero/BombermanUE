@@ -17,7 +17,7 @@ ABomb::ABomb()
 
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere Component"));
 	SphereComponent->SetSphereRadius(35.f);
-	SphereComponent->SetCollisionProfileName(FName("Bomb"));
+	SphereComponent->SetCollisionProfileName(FName("BombPosed"));
 	RootComponent = SphereComponent;
 }
 
@@ -41,7 +41,7 @@ void ABomb::Destroyed()
 
 void ABomb::ExploseDirection(FVector Direction)
 {
-	float SizeBlock = 4 * 50;
+	float SizeBlock = 200;
 	int NbBlock = MainBomber->NbCellExplosed;
 	float Reach = NbBlock * SizeBlock;
 	FVector End = GetActorLocation() + Direction * Reach;
@@ -64,9 +64,9 @@ void ABomb::ExploseDirection(FVector Direction)
 
 	if (IsHit)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, "HIT");
+		//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, "HIT");
 		//FHitResult Hit = Hits[0];
-		DrawDebugLine(GetWorld(), Begin, Hit.GetActor()->GetActorLocation(), FColor::Red, false, 0.5f);
+		//DrawDebugLine(GetWorld(), Begin, Hit.GetActor()->GetActorLocation(), FColor::Red, false, 0.5f);
 
 		float Distance = Hit.Distance;
 		NbBlock = Distance / SizeBlock;

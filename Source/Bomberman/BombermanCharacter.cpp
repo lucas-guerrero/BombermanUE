@@ -78,9 +78,13 @@ void ABombermanCharacter::TakeBomb()
 	Location.Z -= 90.f;
 	FTransform Tranform(GetActorRotation(), Location, GetActorScale());
 
+	SpawnBomb(Tranform);
+
+	/*
 	FTimerHandle TimerHandle;
 	FTimerDelegate TimerDelegate = FTimerDelegate::CreateUObject(this, &ABombermanCharacter::SpawnBomb, Tranform);
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDelegate, 0.25f, false);
+	*/
 }
 
 void ABombermanCharacter::SpawnBomb(FTransform Transform)

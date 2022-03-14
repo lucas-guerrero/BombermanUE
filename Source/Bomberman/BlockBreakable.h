@@ -21,6 +21,8 @@ public:
 	// Sets default values for this actor's properties
 	ABlockBreakable();
 
+	void SpawnExtension();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
