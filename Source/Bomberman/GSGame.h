@@ -24,5 +24,17 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int GetNbPlayer();
 
-	//virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const;
+	UPROPERTY(Replicated, EditAnywhere)
+	bool IsFinish;
+
+	UFUNCTION(BlueprintCallable)
+	void Finish();
+
+	UFUNCTION(BlueprintCallable)
+	bool CanFinish();
+
+	UFUNCTION(BlueprintCallable)
+	void SetIsFinish();
+
+	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
 };

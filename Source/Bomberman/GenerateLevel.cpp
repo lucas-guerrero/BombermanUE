@@ -26,7 +26,7 @@ void AGenerateLevel::GenerateMap()
 {
 	GenerateCamera();
 
-	if (HasAuthority()) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("Authority"));
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("Authority"));
 
 	std::string NameFile = TCHAR_TO_UTF8(*FPaths::ProjectDir());
 	NameFile = NameFile + "/Content/Levels/lvl1.txt";
@@ -119,6 +119,8 @@ void AGenerateLevel::GeneratePlayer(int x, int y, char c)
 		int NbPlayer = GameState->GetNbPlayer();
 
 		int Courrant = c - 48;
+
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("%d -> %d"), NbPlayer, Courrant));
 
 		if (Courrant <= NbPlayer) return;
 

@@ -3,12 +3,15 @@
 
 #include "GSGame.h"
 
-/*
+#include <Net/UnrealNetwork.h>
+
 void AGSGame::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
 {
-    //DOREPLIFETIME(AGSGame, NbPlayer);
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+    DOREPLIFETIME(AGSGame, NbPlayer);
+    DOREPLIFETIME(AGSGame, IsFinish);
 }
-*/
 
 void AGSGame::SetNbPlayer(int NewNbPlayer)
 {
@@ -18,4 +21,19 @@ void AGSGame::SetNbPlayer(int NewNbPlayer)
 int AGSGame::GetNbPlayer()
 {
     return NbPlayer;
+}
+
+void AGSGame::Finish()
+{
+    IsFinish = true;
+}
+
+void AGSGame::SetIsFinish()
+{
+    IsFinish = false;
+}
+
+bool AGSGame::CanFinish()
+{
+    return IsFinish;
 }

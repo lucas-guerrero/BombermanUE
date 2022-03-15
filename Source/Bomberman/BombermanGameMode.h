@@ -3,16 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameModeBase.h"
+#include "GameFramework/GameMode.h"
 #include "BombermanGameMode.generated.h"
 
 UCLASS(minimalapi)
-class ABombermanGameMode : public AGameModeBase
+class ABombermanGameMode : public AGameMode
 {
 	GENERATED_BODY()
 
-public:
-	ABombermanGameMode();
+private:
+	int IndexNbPlayer;
+
 };
 
 

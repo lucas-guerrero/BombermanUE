@@ -15,5 +15,19 @@ class BOMBERMAN_API APCGame : public APlayerController
 	GENERATED_BODY()
 	
 protected:
+	UPROPERTY()
+	class UHUDFinish* HUD_Finish;
+
 	virtual void BeginPlay() override;
+
+public:
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UHUDFinish> BP_HUDFinish;
+
+	void ShowFinish(bool IsWinner);
+
+	UFUNCTION(BlueprintCallable)
+	void Finish(bool IsWinner);
+
+
 };
