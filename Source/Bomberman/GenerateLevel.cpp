@@ -5,6 +5,7 @@
 #include "Wall.h"
 #include "BlockBreakable.h"
 #include "BombermanCharacter.h"
+#include "GSGame.h"
 
 #include <fstream>
 #include <string>
@@ -21,18 +22,8 @@ AGenerateLevel::AGenerateLevel()
 	UnitBlock = 360/2;
 }
 
-// Called when the game starts or when spawned
-void AGenerateLevel::BeginPlay()
+void AGenerateLevel::GenerateMap()
 {
-	Super::BeginPlay();
-
-	//360 unit for 1 block
-	// 9 block per rows / columns
-	/*
-	int NbBlock = 7;
-	float SizeLevels = NbBlock * UnitBlock / 2;
-	*/
-
 	GenerateCamera();
 
 	if (HasAuthority()) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("Authority"));
@@ -76,6 +67,19 @@ void AGenerateLevel::BeginPlay()
 	File.close();
 }
 
+// Called when the game starts or when spawned
+void AGenerateLevel::BeginPlay()
+{
+	Super::BeginPlay();
+
+	//360 unit for 1 block
+	// 9 block per rows / columns
+	/*
+	int NbBlock = 7;
+	float SizeLevels = NbBlock * UnitBlock / 2;
+	*/
+}
+
 void AGenerateLevel::GenerateWall(int x, int y)
 {
 	if (WallClass)
@@ -110,44 +114,16 @@ void AGenerateLevel::GeneratePlayer(int x, int y, char c)
 		FVector SpawnLocation = FVector(x * UnitBlock - Decalage, y * UnitBlock - Decalage, 0.f);
 		FTransform SpawnTransform(GetActorRotation(), SpawnLocation);
 
-		if (c == '1')
-		{
-			/*
-			UGameplayStatics::GetGameState(GetWorld());
-			APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
-			if (PC)
-			{
-				APawn* Player = PC->GetPawn();
-				GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Red, Player->GetName());
+		AGSGame *GameState = Cast<AGSGame>(GetWorld()->GetGameState());
 
-				Player->SetActorLocation(SpawnLocation);
-			}
-			*/
-		}
-		else
-		{
-			ABombermanCharacter* Player = GetWorld()->SpawnActorDeferred<ABombermanCharacter>(PlayerClass, SpawnTransform);
-			Player->FinishSpawning(SpawnTransform);
-		}
+		int NbPlayer = GameState->GetNbPlayer();
 
-		/*
-		for (TActorIterator<ABombermanCharacter> ActorItr(GetWorld(), ABombermanCharacter::StaticClass()); ActorItr; ++ActorItr)
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Red, ActorItr->GetName());
-		}
-		*/
-		/*
-		for (size_t i = 0; i < 4; i++)
-		{
-			APlayerController* PC = UGameplayStatics::GetPlayerController(this, i);
-			if (PC)
-			{
-				APawn* Player = PC->GetPawn();
-				GEngine->AddOnScreenDebugMessage(-1, 500.f, FColor::Red, Player->GetName());
-			}
-			
-		}
-		*/
+		int Courrant = c - 48;
+
+		if (Courrant <= NbPlayer) return;
+
+		ABombermanCharacter* Player = GetWorld()->SpawnActorDeferred<ABombermanCharacter>(PlayerClass, SpawnTransform);
+		Player->FinishSpawning(SpawnTransform);
 		
 	}
 }

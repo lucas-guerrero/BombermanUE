@@ -29,6 +29,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BluePrintReadOnly)
 	TSubclassOf<class ABombermanCharacter> PlayerClass;
 
+	UFUNCTION(BlueprintCallable)
+	void GenerateMap();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

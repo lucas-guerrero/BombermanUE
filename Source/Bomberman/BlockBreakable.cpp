@@ -19,16 +19,18 @@ ABlockBreakable::ABlockBreakable()
 	bReplicates = true;
 }
 
+/*
 void ABlockBreakable::Destroyed()
 {
 	/*
 	FTimerHandle TimerHandle;
 	FTimerDelegate TimerDelegate = FTimerDelegate::CreateUObject(this, &ABlockBreakable::SpawnExtension);
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDelegate, 0.75f, false);
-	*/
+	
 
-	SpawnExtension();
+	//SpawnExtension();
 }
+*/
 
 void ABlockBreakable::SpawnExtension()
 {

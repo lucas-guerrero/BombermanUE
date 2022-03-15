@@ -34,6 +34,7 @@ void ABombermanCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	/*
 	APlayerController* OurPlayerController = UGameplayStatics::GetPlayerController(this, 0);
 
 	TArray<AActor*> FindCamera;
@@ -43,7 +44,7 @@ void ABombermanCharacter::BeginPlay()
 	if (FindCamera.Num() > 0) OurPlayerController->SetViewTargetWithBlend(FindCamera[0], 2.f);
 	else GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("Not Find Camera"));
 
-
+	*/
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -53,7 +54,7 @@ void ABombermanCharacter::SetupPlayerInputComponent(class UInputComponent* Playe
 {
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
-	PlayerInputComponent->BindAction("Bomb", IE_Pressed, this, &ABombermanCharacter::TakeBomb);
+	//PlayerInputComponent->BindAction("Bomb", IE_Pressed, this, &ABombermanCharacter::TakeBomb);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ABombermanCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ABombermanCharacter::MoveRight);

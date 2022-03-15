@@ -3,11 +3,7 @@
 
 #include "PCGame.h"
 
-#include <Blueprint/WidgetLayoutLibrary.h>
-
 void APCGame::BeginPlay()
 {
 	Super::BeginPlay();
-
-	UWidgetLayoutLibrary::RemoveAllWidgets(this);
 }
