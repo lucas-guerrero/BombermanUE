@@ -107,6 +107,57 @@ void ABombermanCharacter::TakeBomb()
 	*/
 }
 
+
+
+FVector ABombermanCharacter::GetFleeLocation(FVector BombLocation)
+{
+	int x1, y1;
+	int MaxDist = 0;
+	int posX = 0, posY = 0;
+
+	x1 = BombLocation.X/360;
+	y1 = BombLocation.Y/360;
+	for(int x2 = 0; x2 < matrix.Num() ; ++x2)
+	{
+		for (int y2 = 0; y2 < matrix[x2].Num() ; ++y2)
+		{
+			int distance = Manhattan(x1, y1, x2, y2);
+			if (distance > MaxDist)
+			{
+				MaxDist = distance;
+				posX = x2*360;
+				posY = y2*360;
+			}
+		}
+	}
+
+	return FVector(posX,posY,GetActorLocation().Z);
+}
+
+void ABombermanCharacter::GetTerrainMatrix()
+{
+	return;
+}
+
+void  ABombermanCharacter::SetTerrainMatrix()
+{
+	return;
+}
+
+int ABombermanCharacter::Manhattan(int x1, int y1, int x2, int y2)
+{
+	int x_dif, y_dif;
+
+	x_dif = x2 - x1;
+	y_dif = y2 - y1;
+	if (x_dif < 0)
+		x_dif = -x_dif;
+	if (y_dif < 0)
+		y_dif = -y_dif;
+	return  x_dif + y_dif;
+}
+
+
 void ABombermanCharacter::SpawnBomb(FTransform Transform)
 {
 	ABomb* Bomb = GetWorld()->SpawnActorDeferred<ABomb>(BombClass, Transform);
