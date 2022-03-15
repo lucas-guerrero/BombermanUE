@@ -41,6 +41,11 @@ void AGenerateLevel::GenerateMap()
 		int x = SizeLevels;
 		int y = SizeLevels;
 
+		matrix.SetNum(x);
+		for (int i = 0; i < x; i++) {
+			matrix[i].Init(1, y);
+		}
+
 		while (std::getline(File, Line))
 		{
 			y = 0;
@@ -50,12 +55,15 @@ void AGenerateLevel::GenerateMap()
 				{
 				case 'X':
 					GenerateWall(x, y);
+					matrix[x][y] = 1;
 					break;
 				case 'O':
 					GenerateBreak(x, y);
+					matrix[x][y] = 2;
 					break;
 				default:
 					GeneratePlayer(x, y, c);
+					matrix[x][y] = 0;
 					break;
 				}
 				y++;
@@ -123,6 +131,7 @@ void AGenerateLevel::GeneratePlayer(int x, int y, char c)
 		if (Courrant <= NbPlayer) return;
 
 		ABombermanCharacter* Player = GetWorld()->SpawnActorDeferred<ABombermanCharacter>(PlayerClass, SpawnTransform);
+		Player->GeneratedLevel = this;
 		Player->FinishSpawning(SpawnTransform);
 		
 	}

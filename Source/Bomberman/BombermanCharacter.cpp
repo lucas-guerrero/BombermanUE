@@ -98,6 +98,10 @@ void ABombermanCharacter::TakeBomb()
 	Location.Z -= 90.f;
 	FTransform Tranform(GetActorRotation(), Location, GetActorScale());
 
+	int x = (GetActorLocation().X + 990) / 180;
+	int y = (GetActorLocation().Y + 990) / 180;
+	GeneratedLevel->matrix[x][y] = 4;
+
 	SpawnBomb(Tranform);
 
 	/*
@@ -111,37 +115,80 @@ void ABombermanCharacter::TakeBomb()
 
 FVector ABombermanCharacter::GetFleeLocation(FVector BombLocation)
 {
-	int x1, y1;
+
+	int x1 = (BombLocation.X + 990) / 180;
+	int y1 = (BombLocation.Y + 990) / 180;
+
+	TArray<std::tuple<int, int>> list;
+	GetListMovementPossible({ x1,y1 }, list);
+	//GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Green, FString::Printf(TEXT("len : %d"),list.Num()));
+
 	int MaxDist = 0;
 	int posX = 0, posY = 0;
+	
 
-	x1 = BombLocation.X/360;
-	y1 = BombLocation.Y/360;
-	for(int x2 = 0; x2 < matrix.Num() ; ++x2)
+	for (std::tuple<int, int> tup : list)
 	{
-		for (int y2 = 0; y2 < matrix[x2].Num() ; ++y2)
+		
+		int x2 = std::get<0>(tup);
+		int y2 = std::get<1>(tup);
+		int distance = Manhattan(x1, y1, x2, y2);
+		//GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Emerald, FString::Printf(TEXT("x/y : %d/%d distance : %d"), std::get<0>(tup), std::get<1>(tup),distance));
+		if (distance > MaxDist)
 		{
-			int distance = Manhattan(x1, y1, x2, y2);
-			if (distance > MaxDist)
+			MaxDist = distance;
+			posX = x2;
+			posY = y2;
+		}
+
+	}
+
+	int a = (posX * 180 - 900);
+	int b = (posY * 180 - 900);
+	GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Emerald, FString::Printf(TEXT("x/y : %d/%d "), a,b));
+
+	return FVector((posX * 180 - 900),(posY * 180 - 900),GetActorLocation().Z);
+}
+
+void ABombermanCharacter::GetListMovementPossible(std::tuple<int,int> depart, TArray<std::tuple<int, int>> &liste)
+{
+	int x = std::get<0>(depart);
+	int y = std::get<1>(depart);
+	if (x >= 0 && x <= 10 && y >= 0 && y <= 10)
+	{
+		if (x - 1 >= 0)
+		{
+			if ( GeneratedLevel->matrix[x-1][y] == 0 && !liste.Contains(std::make_tuple(x - 1, y)))
 			{
-				MaxDist = distance;
-				posX = x2*360;
-				posY = y2*360;
+				liste.Add({ x - 1,y });
+				GetListMovementPossible({ x - 1,y }, liste);
+			}
+		}
+		if(x+1 <= 8)
+		{
+			if(GeneratedLevel->matrix[x+1][y] == 0 && !liste.Contains(std::make_tuple(x + 1,y )))
+			{
+				liste.Add({ x + 1,y });
+				GetListMovementPossible({ x + 1,y }, liste);
+			}
+		}
+		if(y-1 >= 0)
+		{
+			if (GeneratedLevel->matrix[x][y-1] == 0 && !liste.Contains(std::make_tuple(x , y - 1)))
+			{
+				liste.Add({ x ,y - 1 });
+				GetListMovementPossible({ x ,y - 1 }, liste);
+			}
+		}
+		if(y+1 <= 10)
+		{
+			if (GeneratedLevel->matrix[x][y+1] == 0 && !liste.Contains(std::make_tuple(x, y + 1)))
+			{
+				liste.Add({ x,y + 1 });
+				GetListMovementPossible({ x,y + 1 }, liste);
 			}
 		}
 	}
-
-	return FVector(posX,posY,GetActorLocation().Z);
-}
-
-void ABombermanCharacter::GetTerrainMatrix()
-{
-	return;
-}
-
-void  ABombermanCharacter::SetTerrainMatrix()
-{
-	return;
 }
 
 int ABombermanCharacter::Manhattan(int x1, int y1, int x2, int y2)

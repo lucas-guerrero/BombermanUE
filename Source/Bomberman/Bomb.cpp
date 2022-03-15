@@ -31,6 +31,9 @@ void ABomb::BeginPlay()
 
 void ABomb::Destroyed()
 {
+	int x = (GetActorLocation().X + 990) / 180;
+	int y = (GetActorLocation().Y + 990) / 180;
+	if (x>=0 && x<=10 && y >= 0 && y <= 10) MainBomber->GeneratedLevel->matrix[x][y] = 0;
 	if (MainBomber != nullptr)
 	{
 		MainBomber->NbBombPossed++;
@@ -42,6 +45,10 @@ void ABomb::Destroyed()
 void ABomb::ExploseDirection(FVector Direction)
 {
 	float SizeBlock = 200;
+
+	int bombeX = (GetActorLocation().X + 990) / 180;
+	int bombeY = (GetActorLocation().Y + 990) / 180;
+
 	int NbBlock = MainBomber->NbCellExplosed;
 	float Reach = NbBlock * SizeBlock;
 	FVector End = GetActorLocation() + Direction * Reach;
@@ -76,6 +83,9 @@ void ABomb::ExploseDirection(FVector Direction)
 		{
 			Block->Destroy();
 			NbBlock++;
+			int x = (GetActorLocation().X + 990 + Distance*Direction.X) / 180;
+			int y = (GetActorLocation().Y + 990 + Distance*Direction.Y) / 180;
+			if (x >= 0 && x <= 10 && y >= 0 && y <= 10) MainBomber->GeneratedLevel->matrix[x][y] = 0;		
 		}
 		//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("NBBlock: %d"), NbBlock));
 	}
@@ -89,6 +99,7 @@ void ABomb::ExploseDirection(FVector Direction)
 		AExplosion* Explo = GetWorld()->SpawnActor<AExplosion>(ExplosionClass, SpawnTransform);
 	}
 	
+	//MainBomber->GeneratedLevel->matrix[x][y] = 0;
 }
 
 void ABomb::Explose()

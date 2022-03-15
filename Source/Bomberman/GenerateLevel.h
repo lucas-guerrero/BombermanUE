@@ -32,6 +32,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void GenerateMap();
 
+	TArray<TArray<int>> matrix;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "GenerateLevel.h" 
 #include "BombermanCharacter.generated.h"
+
+
 
 UCLASS(config=Game)
 class ABombermanCharacter : public ACharacter
@@ -26,6 +29,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gameplay)
 	int NbCellExplosed;
 
+	// get the generatedLevel and the matrix level
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Gameplay)
+	AGenerateLevel* GeneratedLevel;
+
 
 protected:
 
@@ -38,35 +45,10 @@ protected:
 	UFUNCTION(BlueprintCallable, Category="Bomb")
 	void TakeBomb();
 
-	//USTRUCT(BlueprintType)
-	//	struct SEED_API matrix
-	//{
-	//	GENERATED_USTRUCT_Body()
-	//public:
-	//	TArray<int> Value;
-	//};
-	//UCLASS(ClassGroup = (Custom), eta = (BlueprintSpawnableComponent))
-	//	class SEED_APE UPassiveComponent : public UActorComponent, public ILifeValueState
-	//	SetInterface
-	//{
-	//	GENERATED_BODY()
-	//public:
-	//	UPassiveComponent();
-	//private:
-	//	UPROPERTY(EditAnywhere, BluprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	//		TMap<EPassiveType, FPassiveData> PassiveList;
-	//};
-
-
-	TArray<TArray<int>> matrix;
-
-
 	UFUNCTION(BlueprintCallable, Category = "Bomb")
 	FVector GetFleeLocation(FVector BombLocation);
-	
-	void GetTerrainMatrix();
 
-	void SetTerrainMatrix();
+	void GetListMovementPossible(std::tuple<int, int> depart, TArray<std::tuple<int, int>> &liste);
 
 	int Manhattan(int x1, int y1, int x2, int y2);
 
