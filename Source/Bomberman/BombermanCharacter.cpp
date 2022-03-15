@@ -127,9 +127,8 @@ FVector ABombermanCharacter::GetFleeLocation(FVector BombLocation)
 
 	int a = (posX * 180 - 900);
 	int b = (posY * 180 - 900);
-	GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Emerald, FString::Printf(TEXT("x/y : %d/%d "), a,b));
 
-	return FVector((posX * 180 - 900),(posY * 180 - 900),GetActorLocation().Z);
+	return FVector(a,b,GetActorLocation().Z);
 }
 
 void ABombermanCharacter::GetListMovementPossible(std::tuple<int,int> depart, TArray<std::tuple<int, int>> &liste)
