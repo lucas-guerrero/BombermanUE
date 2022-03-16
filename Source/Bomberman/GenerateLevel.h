@@ -34,6 +34,8 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	void GenerateRow(int x, FString Line);
+
 	void GenerateWall(int x, int y);
 
 	void GenerateBreak(int x, int y);

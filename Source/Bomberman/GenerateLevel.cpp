@@ -21,50 +21,68 @@ void AGenerateLevel::GenerateMap()
 {
 	GenerateCamera();
 
-	std::string NameFile = TCHAR_TO_UTF8(*FPaths::ProjectDir());
-	NameFile = NameFile + "/Content/Levels/lvl1.txt";
+	FString Level = TEXT(  "\
+XXXXXXXXXXX\n\
+X1 OOOOO 2X\n\
+X XOXOXOX X\n\
+XOOOOOOOOOX\n\
+XOXOXOXOXOX\n\
+XOOOOOOOOOX\n\
+XOXOXOXOXOX\n\
+XOOOOOOOOOX\n\
+X XOXOXOX X\n\
+X3 OOOOO 4X\n\
+XXXXXXXXXXX");
 
-	std::ifstream File(NameFile);
-	if (File.is_open())
-	{
-		std::string Line;
+	SizeLevels = 11;
 
-		File >> Line >> SizeLevels;
+	int x = SizeLevels;
+	int y = SizeLevels;
 
-		int x = SizeLevels;
-		int y = SizeLevels;
-
-		matrix.SetNum(x);
-		for (int i = 0; i < x; i++) {
-			matrix[i].Init(1, y);
-		}
-
-		while (std::getline(File, Line))
-		{
-			y = 0;
-			for (char c : Line)
-			{
-				switch (c)
-				{
-				case 'X':
-					GenerateWall(x, y);
-					matrix[x][y] = 1;
-					break;
-				case 'O':
-					GenerateBreak(x, y);
-					matrix[x][y] = 2;
-					break;
-				default:
-					matrix[x][y] = 0;
-					break;
-				}
-				y++;
-			}
-			x--;
-		}
+	matrix.SetNum(x);
+	for (int i = 0; i < x; i++) {
+		matrix[i].Init(1, y);
 	}
 
-	File.close();
+	--x;
+
+	FString Left;
+	FString Right;
+
+	while (Level.Split(TEXT("\n"), &Left, &Right))
+	{		
+		GenerateRow(x, Left);
+
+		--x;
+
+		Level = Right;
+		Left = TEXT("");
+	}
+
+	GenerateRow(x, Right);
+}
+
+void AGenerateLevel::GenerateRow(int x, FString Line)
+{
+	int y = 0;
+	for (char c : Line)
+	{
+		switch (c)
+		{
+		case 'X':
+			GenerateWall(x, y);
+			matrix[x][y] = 1;
+			break;
+		case 'O':
+			GenerateBreak(x, y);
+			matrix[x][y] = 2;
+			break;
+		default:
+			matrix[x][y] = 0;
+			break;
+		}
+		y++;
+	}
 }
 
 void AGenerateLevel::BeginPlay()
