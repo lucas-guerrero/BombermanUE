@@ -45,8 +45,14 @@ protected:
 	UFUNCTION(BlueprintCallable, Category="Bomb")
 	void TakeBomb();
 
-	UFUNCTION(BlueprintCallable, Category = "Bomb")
+	UFUNCTION(BlueprintCallable, Category = "AI")
 	FVector GetFleeLocation(FVector BombLocation);
+
+	UFUNCTION(BlueprintCallable, Category = "AI")
+	FVector GetNearestBomb();
+
+	UFUNCTION(BlueprintCallable, Category = "AI")
+	bool FleeOrSeek();
 
 	void GetListMovementPossible(std::tuple<int, int> depart, TArray<std::tuple<int, int>> &liste);
 

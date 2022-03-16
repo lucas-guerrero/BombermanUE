@@ -13,6 +13,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include <TimerManager.h>
 #include "Kismet/GameplayStatics.h"
+#include "BlockBreakable.h"
 
 //////////////////////////////////////////////////////////////////////////
 // ABombermanCharacter
@@ -77,6 +78,7 @@ void ABombermanCharacter::MoveRight(float Value)
 	}
 }
 
+
 void ABombermanCharacter::TakeBomb()
 {
 	if (NbBombPossed <= 0 || BombClass == nullptr) return;
@@ -88,12 +90,52 @@ void ABombermanCharacter::TakeBomb()
 
 	int x = (GetActorLocation().X + 990) / 180;
 	int y = (GetActorLocation().Y + 990) / 180;
-	GeneratedLevel->matrix[x][y] = 4;
+	if ((x >= 0 && x <= 10 && y >= 0 && y <= 10) && GeneratedLevel!=NULL) GeneratedLevel->matrix[x][y] = 3;
 
 	SpawnBomb(Tranform);
 }
 
+bool ABombermanCharacter::FleeOrSeek()
+{
+	if (GeneratedLevel == NULL) return true;
 
+	int x1 = (GetActorLocation().X + 990) / 180;
+	int y1 = (GetActorLocation().Y + 990) / 180;
+	TArray<TArray<int>> mat = GeneratedLevel->matrix;
+	for (int x = 0 ; x < mat.Num() ; ++x)
+	{
+		for (int y = 0; y < mat[x].Num(); ++y)
+		{
+			if (mat[x][y]==3 && Manhattan(x1, y1, x, y) <= 4)
+			{
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+FVector ABombermanCharacter::GetNearestBomb()
+{
+	if (GeneratedLevel == NULL) return GetActorLocation();
+
+	int x1 = (GetActorLocation().X + 990) / 180;
+	int y1 = (GetActorLocation().Y + 990) / 180;
+	TArray<TArray<int>> mat = GeneratedLevel->matrix;
+	for (int x = 0; x < mat.Num(); ++x)
+	{
+		for (int y = 0; y < mat[x].Num(); ++y)
+		{
+			if (mat[x][y] == 3 && Manhattan(x1, y1, x, y) <= 3)
+			{
+				int posX = (x * 180 - 900);
+				int posY = (y * 180 - 900);
+				return FVector(posX, posY,GetActorLocation().Z);
+			}
+		}
+	}
+	return GetActorLocation();
+}
 
 FVector ABombermanCharacter::GetFleeLocation(FVector BombLocation)
 {
@@ -102,20 +144,20 @@ FVector ABombermanCharacter::GetFleeLocation(FVector BombLocation)
 	int y1 = (BombLocation.Y + 990) / 180;
 
 	TArray<std::tuple<int, int>> list;
+	if (GeneratedLevel == NULL) return GetActorLocation();
+	
 	GetListMovementPossible({ x1,y1 }, list);
-	//GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Green, FString::Printf(TEXT("len : %d"),list.Num()));
 
 	int MaxDist = 0;
 	int posX = 0, posY = 0;
-	
+
 
 	for (std::tuple<int, int> tup : list)
 	{
-		
+
 		int x2 = std::get<0>(tup);
 		int y2 = std::get<1>(tup);
 		int distance = Manhattan(x1, y1, x2, y2);
-		//GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Emerald, FString::Printf(TEXT("x/y : %d/%d distance : %d"), std::get<0>(tup), std::get<1>(tup),distance));
 		if (distance > MaxDist)
 		{
 			MaxDist = distance;
@@ -125,10 +167,11 @@ FVector ABombermanCharacter::GetFleeLocation(FVector BombLocation)
 
 	}
 
-	int a = (posX * 180 - 900);
-	int b = (posY * 180 - 900);
+	int X = (posX * 180 - 900);
+	int Y = (posY * 180 - 900);
 
-	return FVector(a,b,GetActorLocation().Z);
+	return FVector(X, Y, GetActorLocation().Z);
+	
 }
 
 void ABombermanCharacter::GetListMovementPossible(std::tuple<int,int> depart, TArray<std::tuple<int, int>> &liste)
@@ -145,7 +188,7 @@ void ABombermanCharacter::GetListMovementPossible(std::tuple<int,int> depart, TA
 				GetListMovementPossible({ x - 1,y }, liste);
 			}
 		}
-		if(x+1 <= 8)
+		if(x+1 <= 10)
 		{
 			if(GeneratedLevel->matrix[x+1][y] == 0 && !liste.Contains(std::make_tuple(x + 1,y )))
 			{
