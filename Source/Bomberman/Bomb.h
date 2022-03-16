@@ -33,6 +33,9 @@ protected:
 
 	void ExploseDirection(FVector Direction);
 
+	UPROPERTY(EditAnywhere, category = Sound)
+		class USoundBase* ExplosionSound;
+
 public:
 
 	void Explose();

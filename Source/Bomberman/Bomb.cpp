@@ -5,6 +5,7 @@
 
 #include <Components/SphereComponent.h>
 #include <DrawDebugHelpers.h>
+#include <Kismet/GameplayStatics.h>
 
 ABomb::ABomb()
 {
@@ -30,6 +31,11 @@ void ABomb::Destroyed()
 	int y = (GetActorLocation().Y + 990) / 180;
 	
 	if ((x >= 0 && x <= 10 && y >= 0 && y <= 10) && MainBomber->GeneratedLevel) MainBomber->GeneratedLevel->matrix[x][y] = 0;
+
+	if (ExplosionSound != nullptr)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, ExplosionSound, GetActorLocation(), 10.f, 10.f, 0.f);
+	}
 
 	MainBomber->NbBombPossed++;
 	Explose();

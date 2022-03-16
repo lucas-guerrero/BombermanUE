@@ -13,6 +13,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Explosion, meta = (AllowPrivateAccess = "true"));
 	class UBoxComponent* BoxComponent;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Explosion, meta = (AllowPrivateAccess = "true"));
+	float lifeSpan = 0.5f;
+	
 	AExplosion();
 
 protected:

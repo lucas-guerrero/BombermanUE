@@ -23,6 +23,6 @@ void AExplosion::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, AActo
 void AExplosion::BeginPlay()
 {
 	Super::BeginPlay();
-	SetLifeSpan(0.5f);
+	SetLifeSpan(lifeSpan);
 }
 
