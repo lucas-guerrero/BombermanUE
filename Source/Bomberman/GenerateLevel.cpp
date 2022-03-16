@@ -131,11 +131,11 @@ void AGenerateLevel::GeneratePlayer(int x, int y, char c)
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("%d -> %d"), NbPlayer, Courrant));
 
 		if (Courrant <= NbPlayer) return;
-
+		/*
 		ABombermanCharacter* Player = GetWorld()->SpawnActorDeferred<ABombermanCharacter>(PlayerClass, SpawnTransform);
 		Player->GeneratedLevel = this;
 		Player->FinishSpawning(SpawnTransform);
-		
+		*/
 	}
 }
 

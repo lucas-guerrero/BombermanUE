@@ -88,7 +88,7 @@ void ABombermanCharacter::TakeBomb()
 
 	int x = (GetActorLocation().X + 990) / 180;
 	int y = (GetActorLocation().Y + 990) / 180;
-	GeneratedLevel->matrix[x][y] = 4;
+	if(GeneratedLevel) GeneratedLevel->matrix[x][y] = 4;
 
 	SpawnBomb(Tranform);
 }

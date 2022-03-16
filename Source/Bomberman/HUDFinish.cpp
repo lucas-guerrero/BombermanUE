@@ -13,6 +13,7 @@ void UHUDFinish::NativeOnInitialized()
 
 void UHUDFinish::SetResultat(FText Text)
 {
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black, TEXT("Change Text"));
 	if (Resultat) Resultat->SetText(Text);
 }
 

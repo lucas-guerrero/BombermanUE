@@ -18,14 +18,14 @@ public:
 	UPROPERTY(Replicated, EditAnywhere)
 	int NbPlayer;
 
+	UPROPERTY(Replicated, EditAnywhere)
+	bool IsFinish;
+
 	UFUNCTION(BlueprintCallable)
 	void SetNbPlayer(int NewNbPlayer);
 
 	UFUNCTION(BlueprintCallable)
 	int GetNbPlayer();
-
-	UPROPERTY(Replicated, EditAnywhere)
-	bool IsFinish;
 
 	UFUNCTION(BlueprintCallable)
 	void Finish();
