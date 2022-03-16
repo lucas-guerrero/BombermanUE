@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "PCLobby.h"
 #include "HUD_Session_Multi.h"
 
@@ -9,8 +6,6 @@ void APCLobby::BeginPlay()
 	Super::BeginPlay();
 
 	ShowWaitMenu();
-	if (HasAuthority()) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("Serveur"));
-	else GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, TEXT("Client"));
 }
 
 void APCLobby::ShowWaitMenu()
@@ -41,7 +36,6 @@ void APCLobby::HideWaitMenu()
 
 void APCLobby::LaunchGame()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Travel !!!"));
 	HideWaitMenu();
 	GetWorld()->ServerTravel(TEXT("Game"));
 }

@@ -1,14 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "Menu_PC.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class BOMBERMAN_API AMenu_PC : public APlayerController
 {

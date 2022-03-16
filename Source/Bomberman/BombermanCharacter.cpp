@@ -1,49 +1,34 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #include "BombermanCharacter.h"
+#include "BlockBreakable.h"
 #include "Bomb.h"
 #include "GameCamera.h"
 
 #include "HeadMountedDisplayFunctionLibrary.h"
-#include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
-#include "GameFramework/SpringArmComponent.h"
-#include <TimerManager.h>
 #include "Kismet/GameplayStatics.h"
-#include "BlockBreakable.h"
-
-//////////////////////////////////////////////////////////////////////////
-// ABombermanCharacter
 
 ABombermanCharacter::ABombermanCharacter()
 {
-	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
 	NbBombPossed = 1;
 
 	NbCellExplosed = 2;
 
-	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
+	GetCharacterMovement()->bOrientRotationToMovement = true;
 }
 
-// Called when the game starts or when spawned
 void ABombermanCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
-//////////////////////////////////////////////////////////////////////////
-// Input
-
 void ABombermanCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
-	// Set up gameplay key bindings
 	check(PlayerInputComponent);
-	//PlayerInputComponent->BindAction("Bomb", IE_Pressed, this, &ABombermanCharacter::TakeBomb);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ABombermanCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ABombermanCharacter::MoveRight);
@@ -51,13 +36,11 @@ void ABombermanCharacter::SetupPlayerInputComponent(class UInputComponent* Playe
 
 void ABombermanCharacter::MoveForward(float Value)
 {
-	if ((Controller != nullptr) && (Value != 0.0f))
+	if ( Controller && (Value != 0.0f) )
 	{
-		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
-		// get forward vector
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 		AddMovementInput(Direction, Value);
 	}
@@ -65,15 +48,12 @@ void ABombermanCharacter::MoveForward(float Value)
 
 void ABombermanCharacter::MoveRight(float Value)
 {
-	if ( (Controller != nullptr) && (Value != 0.0f) )
+	if ( Controller && (Value != 0.0f) )
 	{
-		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
 	
-		// get right vector 
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
 }
@@ -81,7 +61,7 @@ void ABombermanCharacter::MoveRight(float Value)
 
 void ABombermanCharacter::TakeBomb()
 {
-	if (NbBombPossed <= 0 || BombClass == nullptr) return;
+	if (NbBombPossed <= 0 || !BombClass) return;
 	NbBombPossed--;
 
 	FVector Location = GetActorLocation();
@@ -90,14 +70,14 @@ void ABombermanCharacter::TakeBomb()
 
 	int x = (GetActorLocation().X + 990) / 180;
 	int y = (GetActorLocation().Y + 990) / 180;
-	if ((x >= 0 && x <= 10 && y >= 0 && y <= 10) && GeneratedLevel!=NULL) GeneratedLevel->matrix[x][y] = 3;
+	if ((x >= 0 && x <= 10 && y >= 0 && y <= 10) && GeneratedLevel) GeneratedLevel->matrix[x][y] = 3;
 
 	SpawnBomb(Tranform);
 }
 
 bool ABombermanCharacter::FleeOrSeek()
 {
-	if (GeneratedLevel == NULL) return true;
+	if (!GeneratedLevel) return true;
 
 	int x1 = (GetActorLocation().X + 990) / 180;
 	int y1 = (GetActorLocation().Y + 990) / 180;
@@ -117,7 +97,7 @@ bool ABombermanCharacter::FleeOrSeek()
 
 FVector ABombermanCharacter::GetNearestBomb()
 {
-	if (GeneratedLevel == NULL) return GetActorLocation();
+	if (!GeneratedLevel) return GetActorLocation();
 
 	int x1 = (GetActorLocation().X + 990) / 180;
 	int y1 = (GetActorLocation().Y + 990) / 180;
@@ -144,7 +124,7 @@ FVector ABombermanCharacter::GetFleeLocation(FVector BombLocation)
 	int y1 = (BombLocation.Y + 990) / 180;
 
 	TArray<std::tuple<int, int>> list;
-	if (GeneratedLevel == NULL) return GetActorLocation();
+	if (!GeneratedLevel) return GetActorLocation();
 	
 	GetListMovementPossible({ x1,y1 }, list);
 

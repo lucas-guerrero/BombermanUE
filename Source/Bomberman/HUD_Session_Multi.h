@@ -16,20 +16,9 @@ class BOMBERMAN_API UHUD_Session_Multi : public UUserWidget
 
 public:
 	UPROPERTY(meta = (BindWidget))
-		class UButton* LaunchButton;
-
-	UPROPERTY(meta = (BindWidget))
-		class UButton* LeaveButton;
+	class UButton* LaunchButton;
 
 	virtual void NativeOnInitialized();
 
-	void Autority();
 	void NotAutority();
-
-protected:
-	UFUNCTION()
-		void OnLaunchClick();
-
-	UFUNCTION()
-		void OnLeaveClick();
 };

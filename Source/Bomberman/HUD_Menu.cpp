@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "HUD_Menu.h"
 
 #include "Menu_PC.h"
@@ -20,20 +17,16 @@ void UHUD_Menu::OnPlayClick()
 {
 	AMenu_PC* PlayerController = Cast<AMenu_PC>(GetOwningPlayer());
 
-	if (PlayerController != nullptr)
-	{
-		PlayerController->HideMenu();
-	}
+	if (PlayerController) PlayerController->HideMenu();
 
 	UGameplayStatics::OpenLevel(this, FName("Game"));
 }
 
 void UHUD_Menu::OnMultiClick()
 {
-	
 	AMenu_PC* PlayerController = Cast<AMenu_PC>(GetOwningPlayer());
 
-	if (PlayerController != nullptr)
+	if (PlayerController)
 	{
 		PlayerController->HideMenu();
 		PlayerController->ShowMultiMenu();

@@ -17,27 +17,23 @@ private:
 
 	class ABombermanCharacter* MainBomber;
 
-public:	
-	// Sets default values for this actor's properties
+public:
 	ABomb();
 
 	UPROPERTY(EditDefaultsOnly, BluePrintReadOnly, Category = Bomb)
 	TSubclassOf<class AExplosion> ExplosionClass;
 
 	UPROPERTY(EditAnywhere, Category = Bomb)
-		bool Explode = true;
+	bool Explode = true;
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	virtual void Destroyed() override;
 
 	void ExploseDirection(FVector Direction);
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+public:
 
 	void Explose();
 

@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -11,8 +9,7 @@ class BOMBERMAN_API AGenerateLevel : public AActor
 {
 	GENERATED_BODY()
 	
-public:	
-	// Sets default values for this actor's properties
+public:
 	AGenerateLevel();
 
 	UPROPERTY(VisibleAnywhere)
@@ -35,14 +32,11 @@ public:
 	TArray<TArray<int>> matrix;
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	void GenerateWall(int x, int y);
 
 	void GenerateBreak(int x, int y);
-
-	void GeneratePlayer(int x, int y, char c);
 
 	void GenerateCamera();
 };

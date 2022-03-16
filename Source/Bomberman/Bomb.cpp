@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Bomb.h"
 #include "BombermanCharacter.h"
 #include "Explosion.h"
@@ -9,11 +6,9 @@
 #include <Components/SphereComponent.h>
 #include <DrawDebugHelpers.h>
 
-// Sets default values
 ABomb::ABomb()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere Component"));
 	SphereComponent->SetSphereRadius(35.f);
@@ -21,7 +16,6 @@ ABomb::ABomb()
 	RootComponent = SphereComponent;
 }
 
-// Called when the game starts or when spawned
 void ABomb::BeginPlay()
 {
 	Super::BeginPlay();
@@ -34,11 +28,10 @@ void ABomb::Destroyed()
 	if (!MainBomber) return;
 	int x = (GetActorLocation().X + 990) / 180;
 	int y = (GetActorLocation().Y + 990) / 180;
-	if (MainBomber != nullptr)
-	{
-		if ((x >= 0 && x <= 10 && y >= 0 && y <= 10) && MainBomber->GeneratedLevel!=NULL) MainBomber->GeneratedLevel->matrix[x][y] = 0;
-		MainBomber->NbBombPossed++;
-	}
+	
+	if ((x >= 0 && x <= 10 && y >= 0 && y <= 10) && MainBomber->GeneratedLevel) MainBomber->GeneratedLevel->matrix[x][y] = 0;
+
+	MainBomber->NbBombPossed++;
 	Explose();
 }
 
@@ -67,14 +60,8 @@ void ABomb::ExploseDirection(FVector Direction)
 		QueryParam
 	);
 
-	//DrawDebugLine(GetWorld(), Begin, End, FColor::Red, false, 0.5f);
-
 	if (IsHit)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, "HIT");
-		//FHitResult Hit = Hits[0];
-		//DrawDebugLine(GetWorld(), Begin, Hit.GetActor()->GetActorLocation(), FColor::Red, false, 0.5f);
-
 		float Distance = Hit.Distance;
 		NbBlock = Distance / SizeBlock;
 
@@ -85,12 +72,10 @@ void ABomb::ExploseDirection(FVector Direction)
 			NbBlock++;
 			int x = (GetActorLocation().X + 990 + Distance*Direction.X) / 180;
 			int y = (GetActorLocation().Y + 990 + Distance*Direction.Y) / 180;
-			if ((x >= 0 && x <= 10 && y >= 0 && y <= 10) && MainBomber->GeneratedLevel != NULL) MainBomber->GeneratedLevel->matrix[x][y] = 0;
+			if ((x >= 0 && x <= 10 && y >= 0 && y <= 10) && MainBomber->GeneratedLevel) MainBomber->GeneratedLevel->matrix[x][y] = 0;
 		}
-		//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("NBBlock: %d"), NbBlock));
 	}
-	
-	
+
 	// 1 Block = 4*50
 	for (int i = 0; i < NbBlock*4; ++i)
 	{
@@ -98,8 +83,6 @@ void ABomb::ExploseDirection(FVector Direction)
 		FTransform SpawnTransform(GetActorRotation(), SpawnLocation);
 		AExplosion* Explo = GetWorld()->SpawnActor<AExplosion>(ExplosionClass, SpawnTransform);
 	}
-	
-	//MainBomber->GeneratedLevel->matrix[x][y] = 0;
 }
 
 void ABomb::Explose()
@@ -108,11 +91,5 @@ void ABomb::Explose()
 	ExploseDirection(FVector::LeftVector);
 	ExploseDirection(FVector::ForwardVector);
 	ExploseDirection(FVector::BackwardVector);
-}
-
-// Called every frame
-void ABomb::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 }
 

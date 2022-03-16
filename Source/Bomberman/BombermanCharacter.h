@@ -1,5 +1,3 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -35,11 +33,8 @@ public:
 
 
 protected:
-
-	/** Called for forwards/backward input */
 	void MoveForward(float Value);
 
-	/** Called for side to side input */
 	void MoveRight(float Value);
 
 	UFUNCTION(BlueprintCallable, Category="Bomb")
