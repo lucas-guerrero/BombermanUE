@@ -34,13 +34,11 @@ void ABomb::Destroyed()
 	if (!MainBomber) return;
 	int x = (GetActorLocation().X + 990) / 180;
 	int y = (GetActorLocation().Y + 990) / 180;
-	if (x >= 0 && x <= 10 && y >= 0 && y <= 10)
+	if (MainBomber != nullptr)
 	{
-		if(MainBomber->GeneratedLevel)
-		MainBomber->GeneratedLevel->matrix[x][y] = 0;
+		if ((x >= 0 && x <= 10 && y >= 0 && y <= 10) && MainBomber->GeneratedLevel!=NULL) MainBomber->GeneratedLevel->matrix[x][y] = 0;
+		MainBomber->NbBombPossed++;
 	}
-	
-	MainBomber->NbBombPossed++;
 	Explose();
 }
 
@@ -87,11 +85,7 @@ void ABomb::ExploseDirection(FVector Direction)
 			NbBlock++;
 			int x = (GetActorLocation().X + 990 + Distance*Direction.X) / 180;
 			int y = (GetActorLocation().Y + 990 + Distance*Direction.Y) / 180;
-			if (x >= 0 && x <= 10 && y >= 0 && y <= 10)
-			{
-				if (MainBomber->GeneratedLevel)
-				MainBomber->GeneratedLevel->matrix[x][y] = 0;
-			}
+			if ((x >= 0 && x <= 10 && y >= 0 && y <= 10) && MainBomber->GeneratedLevel != NULL) MainBomber->GeneratedLevel->matrix[x][y] = 0;
 		}
 		//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("NBBlock: %d"), NbBlock));
 	}
